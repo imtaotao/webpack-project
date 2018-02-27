@@ -3,7 +3,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
 
-if (config.common.nodeMonkey) {
+if (config.dev.nodeMonkey) {
   // http://127.0.0.1:50500 默认账号密码 guest
   require('node-monkey')()
 }
@@ -62,9 +62,9 @@ app.use(devMiddleware)
 // 启用热重载和状态保存
 app.use(hotMiddleware)
 
-// 提供纯静态资源(有bug)
-// const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-// app.use(staticPath, express.static('../src'))
+// 提供纯静态资源
+const staticSource = path.join(__dirname, '../src')
+app.use(config.dev.staticResoucePath, express.static(staticSource))
 
 const uri = 'http://localhost:' + port
 let _resolve

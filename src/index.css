@@ -1,0 +1,10 @@
+.test {
+	width: 10px;
+	height: 10px; 
+	background: #000;
+}
+div {
+	width: 100px;
+	height: 100px;
+	background: resolve('./image/bg.png');
+}

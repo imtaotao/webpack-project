@@ -17,16 +17,20 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     port: 3000,
-    autoOpenBrowser: false,
+    autoOpenBrowser: true,
+    // 打包的静态文件存放位置
     assetsSubDirectory: 'assets',
     assetsPublicPath: '/',
+     staticResoucePath: '/static',
     // 跨域设置 https://github.com/chimurai/http-proxy-middleware
     proxyTable: {},
-    cssSourceMap: true
-  },
-  commom: {
-  	// resolve 指定路径，通用，设置 false 可以禁止掉
-    cssRootPath: './assets',
+    cssSourceMap: true,
+    //  `npm install --save-dev node-monkey`
     nodeMonkey: false
+  },
+  common: {
+    modules: true,
+  	// resolve 指定路径，通用，设置 false 可以禁止掉
+    cssRootPath: './assets'
   }
 }

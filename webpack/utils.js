@@ -10,16 +10,30 @@ exports.assetsPath = function (_path) {
 	return path.posix.join(assetsSubDirectory, _path)
 }
 
+exports.cssLoaderConfig = function () {
+  return {
+    loader: 'css-loader',
+    options: {
+      root: '/',
+      modules: config.common.modules,
+      localIdentName: '[local]_[hash:base64:5]',
+      minimize: true,
+      sourceMap: config.build.productionSourceMap
+    }
+  }
+}
+
 // https://github.com/postcss/postcss
 exports.PostCssLoader = function (type = 'css') {
   const isProd = process.env.NODE_ENV === 'production'
 
   function getPlugins (loader) {
     const plugins = []
-    const cssRootPath = config.commom.cssRootPath
+    const cssRootPath = config.common.cssRootPath
 
     if (isProd) {
-      plugins.push(require('cssnano')()) // 压缩css代码
+      // 压缩css代码
+      plugins.push(require('cssnano')())
     }
     // 如果使用了 resolve 也要配置
     if (type === 'css' || cssRootPath != null) {
@@ -71,7 +85,8 @@ function replaceRealUrl ({value}, cssRootPath) {
   value = value.replace(
     /(resolve)(\(['"])+([^\(\)'"]+)/g, 
     (k1, k2, k3, k4) => {
-      return 'url' + k3 + path.join(cssRootPath, k4)
+      const pathSymbol = config.common.modules ? './' : ''
+      return 'url' + k3 + pathSymbol + path.join(cssRootPath, k4)
     }
   )
   return value

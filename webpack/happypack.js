@@ -30,7 +30,9 @@ module.exports = {
         {
           path: 'css-loader',
           query: {
-            sourceMap: config.dev.cssSourceMap
+            sourceMap: config.dev.cssSourceMap,
+            modules: config.common.modules,
+            localIdentName: '[local]_[hash:base64:5]'
           }
         }
       ]
@@ -43,9 +45,9 @@ module.exports = {
           path: 'css-loader',
           query: {
             sourceMap: config.dev.cssSourceMap,
-            modules: true,
+            modules: config.common.modules,
             importLoaders: 3,
-            localIdentName: '[local]_[hash:base64:5]',
+            localIdentName: '[local]_[hash:base64:5]'
           }
         }
       ]

@@ -4,10 +4,11 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const utils = require('./utils')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const baseWebpackConfig = require('./base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const utils = require('./utils')
 const config = require('./config')
 
 const prodConfig= {
@@ -17,13 +18,7 @@ const prodConfig= {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true,
-                sourceMap: config.build.productionSourceMap
-              }
-            },
+            utils.cssLoaderConfig(),
             utils.PostCssLoader(),
           ],
           fallback: 'style-loader',
@@ -35,6 +30,7 @@ const prodConfig= {
         exclude: /(node_modules|libs)/,
         use: ExtractTextPlugin.extract({
           use: [
+            utils.cssLoaderConfig(),
             utils.PostCssLoader('sass'),
             'resolve-url-loader'
           ],
@@ -50,6 +46,9 @@ const prodConfig= {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
+    new CleanWebpackPlugin(config.build.assetsRoot, {
+      root: path.resolve(__dirname, '..'),
+    }),
     new webpack.DefinePlugin({
       'process.env': config.build.env
     }),
