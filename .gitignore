@@ -1,0 +1,67 @@
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+test/unit/coverage
+test/e2e/reports
+selenium-debug.log
+
+# Editor directories and files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+#vim
+*~
+*.sw?
+
+# python
+*.pyc
+
+# generic editing tools
+tags
+
+#mac
+*.DS_Store
+
+# libs
+libs/fabric.js/node_modules
+libs/fabric.js/
+libs/artTemplate/
+libs/closure-library
+libs/closure-library/
+libs/google-closure-library/
+libs/JIC/
+libs/Recorderjs/
+libs/Matter/
+libs/MIDI.js/
+libs/font-awesome/
+libs/react/
+
+# build tools
+node_modules/
+typings/
+
+# logfiles
+*.log
+.idea/
+.vscode/
+
+# build artifacts
+dist/
+build/
+webpack/dll/
+stats.json
+
+# config override
+config/local.json
+config/qnconfig.json
+
+# Docs
+doc/
+
+# insecure_cert
+insecure_cert/localhost.crt
+insecure_cert/localhost.key
+
+coverage/
