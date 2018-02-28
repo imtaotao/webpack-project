@@ -54,12 +54,13 @@ Object.keys(proxyTable).forEach(function (context) {
 })
 
 // https://www.npmjs.com/package/connect-history-api-fallback
+// 使用 connect-history-api-fallback 匹配资源，如果不匹配就可以重定向到指定地址
 app.use(require('connect-history-api-fallback')())
 
-// 提供webpack包输出
+// 将暂存到内存中的 webpack 编译后的文件挂在到 express 服务上
 app.use(devMiddleware)
 
-// 启用热重载和状态保存
+// 将 Hot-reload 挂在到 express 服务上并且输出相关的状态、错误
 app.use(hotMiddleware)
 
 // 提供纯静态资源

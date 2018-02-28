@@ -1,3 +1,3 @@
-import '@/index.css'
-console.log('current environment：', process.env.NODE_ENV)
+import '@/index.scss'
+console.log('current environment：', process.env)
 console.log('start your project.')

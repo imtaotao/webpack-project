@@ -17,7 +17,7 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     port: 3000,
-    autoOpenBrowser: true,
+    autoOpenBrowser: false,
     // 打包的静态文件存放位置
     assetsSubDirectory: 'assets',
     assetsPublicPath: '/',
