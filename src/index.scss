@@ -1,10 +1,11 @@
-.test {
-	width: 10px;
-	height: 10px; 
-	background: #000;
+body {
+	margin: 0;
 }
 div {
-	width: 100px;
-	height: 100px;
-	background: resolve('./image/bg.png');
+	width: 100vw;
+	height: 100vh;
+	background: resolve('./image/bg.png') no-repeat 0 0 / cover;
+	font-weight: bold;
+	font-size: 30px;
+	padding: 2vh 0 0 2vw;
 }
