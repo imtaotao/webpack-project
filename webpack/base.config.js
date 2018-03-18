@@ -19,7 +19,7 @@ module.exports = merge({
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.json'],
+    extensions: ['.js', '.jsx', '.ts', 'tsx', '.json'],
     alias: {
       '@': resolve('src')
     }
@@ -58,10 +58,6 @@ module.exports = merge({
     ]
   },
   plugins: [
-    new webpack.optimize.LimitChunkCountPlugin({
-      // disable creating additional chunks
-      maxChunks: 1
-    }),
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
     }),

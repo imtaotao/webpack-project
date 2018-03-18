@@ -4,8 +4,8 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 const progressbarWebpack = require('progress-bar-webpack-plugin')
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const baseWebpackConfig = require('./base.config')
@@ -33,7 +33,13 @@ const prodConfig= {
           use: [
             utils.cssLoaderConfig(),
             utils.PostCssLoader('sass'),
-            'resolve-url-loader'
+            'resolve-url-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: config.build.productionSourceMap
+              }
+            }
           ],
           publicPath: '../../'
         })
@@ -50,18 +56,15 @@ const prodConfig= {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
-    new CleanWebpackPlugin(config.build.assetsRoot, {
-      root: path.resolve(__dirname, '..'),
-    }),
     new progressbarWebpack(),
     new webpack.DefinePlugin({
       'process.env': config.build.env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
+    new LodashModuleReplacementPlugin({
+      shorthands: true,
+      collections: true,
+      coercions: true,
+      flattening: true,
     }),
     new WebpackMd5Hash(),
     // 解决 vendor module.id 的修改而发生的变化，导致hash的变化
@@ -148,6 +151,27 @@ if (config.build.productionGzip) {
       threshold: 10240,
       // 只有大小大于该值的资源会被处理。单位是 bytes。默认值是 0
       minRatio: 0.8
+    })
+  )
+}
+
+// 合并小的碎片文件，减少http请求
+if (config.build.limitChunkCount) {
+  prodConfig.plugins.push(
+    new webpack.optimize.LimitChunkCountPlugin({
+      // disable creating additional chunks
+      maxChunks: 4
+    })
+  )
+}
+
+if (!config.build.productionSourceMap) {
+  prodConfig.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      sourceMap: true
     })
   )
 }
