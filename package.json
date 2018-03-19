@@ -5,16 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node webpack/dev-server.js",
-    "build": "cross-env NODE_ENV=production node webpack/build.js",
-    "build:reprot": "npm run build --report"
+    "build": "cross-env NODE_ENV=production node webpack/build.js"
   },
   "author": "chentao",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
-    "cmblockly": "file:src/libs/cmblockly-0.0.13.tgz",
-    "codemao-heart": "file:src/libs/codemao-heart-0.2.3.tgz",
     "intl": "^1.2.5",
     "jquery": "^3.3.1",
     "lodash": "^4.17.5",
