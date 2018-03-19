@@ -80,7 +80,7 @@ function replaceRealUrl ({value}, resourcePath, cssRootPath) {
   value = value.replace(
     /(resolve)(\(['"])+([^\(\)'"]+)/g,
     (k1, k2, k3, k4) => {
-      const concatUrl = path.join(relativeUrl, k4)
+      const concatUrl = path.posix.join(relativeUrl, k4)
       return 'url' + k3 + (
         concatUrl[0] === '.' ? concatUrl : './' + concatUrl
       )
