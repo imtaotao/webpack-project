@@ -3,7 +3,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
 
-if (config.common.nodeMonkey) {
+if (config.dev.nodeMonkey) {
   // http://127.0.0.1:50500 默认账号密码 guest
   require('node-monkey')()
 }
@@ -54,17 +54,18 @@ Object.keys(proxyTable).forEach(function (context) {
 })
 
 // https://www.npmjs.com/package/connect-history-api-fallback
+// 使用 connect-history-api-fallback 匹配资源，如果不匹配就可以重定向到指定地址
 app.use(require('connect-history-api-fallback')())
 
-// 提供webpack包输出
+// 将暂存到内存中的 webpack 编译后的文件挂在到 express 服务上
 app.use(devMiddleware)
 
-// 启用热重载和状态保存
+// 将 Hot-reload 挂在到 express 服务上并且输出相关的状态、错误
 app.use(hotMiddleware)
 
-// 提供纯静态资源(有bug)
-// const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-// app.use(staticPath, express.static('../src'))
+// 提供纯静态资源
+const staticSource = path.join(__dirname, '../src')
+app.use(config.dev.staticResoucePath, express.static(staticSource))
 
 const uri = 'http://localhost:' + port
 let _resolve
@@ -76,7 +77,6 @@ console.log('> Starting dev server...')
 // 编译完成之后执行回调
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n')
-  // 测试环境就不要让浏览器打开了，opn包可以自动打开浏览器，做了不同平台下的命令兼容
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
     opn(uri)
   }

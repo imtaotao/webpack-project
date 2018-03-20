@@ -7,9 +7,9 @@ const utils = require('./utils')
 const config = require('./config')
 const resolve = dir => path.join(__dirname, '..', dir)
 
-module.exports = merge({
+const baseConfig = {
   entry: {
-    app: resolve('/src/main.ts') 
+    app: resolve('/src/index.tsx')
   },
   output: {
     path: config.build.assetsRoot,
@@ -19,9 +19,10 @@ module.exports = merge({
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.json'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
-      '@': resolve('src')
+      'src': resolve('src'),
+      '@': resolve('src/components')
     }
   },
   module: {
@@ -35,7 +36,7 @@ module.exports = merge({
         test: /\.(ts|tsx)?$/,
         use: [
           'happypack/loader?id=babel',
-          'happypack/loader?id=ts',
+          'happypack/loader?id=ts'
         ],
         include: resolve('src'),
       },
@@ -58,12 +59,10 @@ module.exports = merge({
     ]
   },
   plugins: [
-    new webpack.optimize.LimitChunkCountPlugin({
-      // disable creating additional chunks
-      maxChunks: 1
-    }),
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
-    }),
+    })
   ]
-}, require('./happypack'))
+}
+
+module.exports = merge(baseConfig, require('./happypack'))

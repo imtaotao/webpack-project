@@ -4,10 +4,13 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const utils = require('./utils')
-const baseWebpackConfig = require('./base.config')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const progressbarWebpack = require('progress-bar-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+const baseWebpackConfig = require('./base.config')
+const utils = require('./utils')
 const config = require('./config')
 
 const prodConfig= {
@@ -17,13 +20,7 @@ const prodConfig= {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           use: [
-            {
-              loader: 'css-loader',
-              options: {
-                minimize: true,
-                sourceMap: config.build.productionSourceMap
-              }
-            },
+            utils.cssLoaderConfig(),
             utils.PostCssLoader(),
           ],
           fallback: 'style-loader',
@@ -35,8 +32,15 @@ const prodConfig= {
         exclude: /(node_modules|libs)/,
         use: ExtractTextPlugin.extract({
           use: [
+            utils.cssLoaderConfig(),
             utils.PostCssLoader('sass'),
-            'resolve-url-loader'
+            'resolve-url-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: config.build.productionSourceMap
+              }
+            }
           ],
           publicPath: '../../'
         })
@@ -44,22 +48,31 @@ const prodConfig= {
     ]
   },
   devtool: config.build.productionSourceMap ? '#source-map' : false,
+  // entry: {
+  //   vendor: ['lodash', 'react']
+  // },
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
+    // new FaviconsWebpackPlugin(path.join('../../', 'favicon.png')),
+    new progressbarWebpack(),
     new webpack.DefinePlugin({
       'process.env': config.build.env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
+    new LodashModuleReplacementPlugin({
+      shorthands: true,
+      collections: true,
+      coercions: true,
+      flattening: true,
     }),
+
+    // webpack2 以后，修改了 hash 的计算方式，不需要用插件重新生成
     new WebpackMd5Hash(),
+    // 解决 vendor module.id 的修改而发生的变化，导致hash的变化
+    new webpack.HashedModuleIdsPlugin(),
     new HtmlWebpackPlugin({
     	// 生成的html的文件名
       filename: config.build.index,
@@ -81,7 +94,12 @@ const prodConfig= {
       // excludeChunks : [] // 允许你跳过一些chunks
       // chunks: [...] 可以指定生成的html包含哪些块
     }),
-    // 提取所有的公共模块到vendorJs
+    // 提取所有的公共模块到vendorJs，这些模块很少频繁修改，便于利用浏览器缓存
+    /* 
+      也可以指定一系列需要用到的库
+      在 entry 选项配置 vendor: [...library]，kitten 就是这样做的
+      但是这里通用的是把所有 node_modules 文件放到一起
+    */
     new webpack.optimize.CommonsChunkPlugin({
     	// 生成的文件名字
       name: 'vendor',
@@ -96,6 +114,11 @@ const prodConfig= {
         )
       }
     }),
+    // webpack 会把 runtime && manifest 打包到最后面的一个 CommonsChunkPlugin 生成的 chunk 里,所以顺序很重要
+    // 从vendor中提取出manifest，原因是
+    /*
+      runtime 代码会影响到 vendor 的 hash 值，导致浏览器的缓存失效
+    */
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       // 如果忽略，所有的入口文件都会被选择，而且 chunk 必须是公共chunk 的子模块
@@ -136,9 +159,30 @@ if (config.build.productionGzip) {
   )
 }
 
+// 合并小的碎片文件，减少http请求
+if (config.build.limitChunkCount) {
+  prodConfig.plugins.push(
+    new webpack.optimize.LimitChunkCountPlugin({
+      // disable creating additional chunks
+      maxChunks: 4
+    })
+  )
+}
+
+if (!config.build.productionSourceMap) {
+  prodConfig.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      sourceMap: true
+    })
+  )
+}
+
 // 可视化文件/组件的打包大小（用于分析打包后的代码）
 if (config.build.bundleAnalyzerReport) {
-  var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   prodConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 
