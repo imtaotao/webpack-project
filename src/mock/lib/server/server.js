@@ -14,7 +14,6 @@ export class MockerServer {
   }
 };
 
-
 self.addEventListener('fetch', event => {
   MockerRouter.router.some(router => router._match(event));
 });
