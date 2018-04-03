@@ -12,6 +12,7 @@ module.exports = {
     productionGzip: false,
     limitChunkCount: false,
     productionGzipExtensions: ['js', 'css'],
+    limitChunkCount: false,
     // `npm run build --report`
     bundleAnalyzerReport: process.env.npm_config_report
   },
@@ -22,7 +23,7 @@ module.exports = {
     // 打包的静态文件存放位置
     assetsSubDirectory: 'assets',
     assetsPublicPath: '/',
-     staticResoucePath: '/static',
+    staticResoucePath: '/static',
     // 跨域设置 https://github.com/chimurai/http-proxy-middleware
     proxyTable: {},
     cssSourceMap: true,

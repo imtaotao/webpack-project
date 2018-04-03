@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const progressbarWebpack = require('progress-bar-webpack-plugin')
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const baseWebpackConfig = require('./base.config')
@@ -59,6 +60,12 @@ const prodConfig= {
     new progressbarWebpack(),
     new webpack.DefinePlugin({
       'process.env': config.build.env
+    }),
+    new LodashModuleReplacementPlugin({
+      shorthands: true,
+      collections: true,
+      coercions: true,
+      flattening: true,
     }),
     new WebpackMd5Hash(),
     // 解决 vendor module.id 的修改而发生的变化，导致hash的变化

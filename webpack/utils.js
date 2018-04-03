@@ -4,10 +4,10 @@ const config = require('./config')
 
 // js css 图片文件的存放位置
 exports.assetsPath = function (_path) {
-	const assetsSubDirectory = process.env.NODE_ENV === 'production'
-		? config.build.assetsSubDirectory
+  const assetsSubDirectory = process.env.NODE_ENV === 'production'
+    ? config.build.assetsSubDirectory
     : config.dev.assetsSubDirectory
-	return path.posix.join(assetsSubDirectory, _path)
+  return path.posix.join(assetsSubDirectory, _path)
 }
 
 exports.cssLoaderConfig = function () {
@@ -88,9 +88,10 @@ function replaceRealUrl ({value}, resourcePath, cssRootPath) {
   value = value.replace(
     /(resolve)(\(['"])+([^\(\)'"]+)/g,
     (k1, k2, k3, k4) => {
-      let url = path.join(relativeUrl, k4)
-      url[0] !== '.' &&  (url = './' + url)
-      return 'url' + k3 + url
+      const concatUrl = path.posix.join(relativeUrl, k4)
+      return 'url' + k3 + (
+        concatUrl[0] === '.' ? concatUrl : './' + concatUrl
+      )
     }
   )
   return value
