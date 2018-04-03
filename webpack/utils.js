@@ -14,7 +14,6 @@ exports.cssLoaderConfig = function () {
   return {
     loader: 'css-loader',
     options: {
-      root: '/',
       modules: config.common.modules,
       localIdentName: '[local]_[hash:base64:5]',
       minimize: true,
@@ -31,9 +30,6 @@ exports.PostCssLoader = function (type = 'css') {
     const plugins = []
     const cssRootPath = config.common.cssRootPath
 
-    if (isProd) {
-      plugins.push(require('cssnano')())
-    }
     if (type === 'css') {
       plugins.push(require('postcss-mixins')())
       plugins.push(require('postcss-cssnext')(cssnextOptions())) //cssnext 中包含了 autoprefixer
