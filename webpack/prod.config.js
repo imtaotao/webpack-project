@@ -4,7 +4,6 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 const progressbarWebpack = require('progress-bar-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -33,8 +32,15 @@ const prodConfig= {
           use: [
             utils.cssLoaderConfig(),
             utils.PostCssLoader('sass'),
-            'resolve-url-loader'
+            'resolve-url-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: config.build.productionSourceMap
+              }
+            }
           ],
+          fallback: 'style-loader',
           publicPath: '../../'
         })
       }
@@ -50,18 +56,9 @@ const prodConfig= {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
-    new CleanWebpackPlugin(config.build.assetsRoot, {
-      root: path.resolve(__dirname, '..'),
-    }),
     new progressbarWebpack(),
     new webpack.DefinePlugin({
       'process.env': config.build.env
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
     }),
     new WebpackMd5Hash(),
     // 解决 vendor module.id 的修改而发生的变化，导致hash的变化
@@ -88,7 +85,7 @@ const prodConfig= {
       // chunks: [...] 可以指定生成的html包含哪些块
     }),
     // 提取所有的公共模块到vendorJs，这些模块很少频繁修改，便于利用浏览器缓存
-    /* 
+    /*
       也可以指定一系列需要用到的库
       在 entry 选项配置 vendor: [...library]，kitten 就是这样做的
       但是这里通用的是把所有 node_modules 文件放到一起
@@ -148,6 +145,26 @@ if (config.build.productionGzip) {
       threshold: 10240,
       // 只有大小大于该值的资源会被处理。单位是 bytes。默认值是 0
       minRatio: 0.8
+    })
+  )
+}
+
+// 合并小的碎片文件，减少http请求
+if (config.build.limitChunkCount) {
+  prodConfig.plugins.push(
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 4
+    })
+  )
+}
+
+if (!config.build.productionSourceMap) {
+  prodConfig.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      },
+      sourceMap: true
     })
   )
 }

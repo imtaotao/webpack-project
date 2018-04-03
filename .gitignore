@@ -65,3 +65,4 @@ insecure_cert/localhost.crt
 insecure_cert/localhost.key
 
 coverage/
+package-lock.json

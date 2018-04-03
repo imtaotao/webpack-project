@@ -7,9 +7,10 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
-    productionSourceMap: true,
+    productionSourceMap: !!process.env.npm_config_sourcemap,
     // npm install --save-dev compression-webpack-plugin
     productionGzip: false,
+    limitChunkCount: false,
     productionGzipExtensions: ['js', 'css'],
     // `npm run build --report`
     bundleAnalyzerReport: process.env.npm_config_report
@@ -31,6 +32,6 @@ module.exports = {
   common: {
     modules: true,
   	// resolve 指定路径，通用，设置 false 可以禁止掉
-    cssRootPath: './assets'
+    cssRootPath: path.resolve(__dirname, '../../src/assets')
   }
 }
