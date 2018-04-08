@@ -14,6 +14,7 @@ const express = require('express')
 const webpack = require('webpack')
 const proxyMiddleware = require('http-proxy-middleware')
 const webpackConfig = require('./dev.config')
+const { getIP } = require('./utils')
 
 const port = process.env.PORT || config.dev.port
 const autoOpenBrowser = !!config.dev.autoOpenBrowser
@@ -24,7 +25,7 @@ const compiler = webpack(webpackConfig)
 // https://www.npmjs.com/package/webpack-dev-middleware
 const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  //向控制台显示任何内容 
+  //向控制台显示任何内容
   quiet: true
 })
 
@@ -68,6 +69,7 @@ const staticSource = path.join(__dirname, '../src')
 app.use(config.dev.staticResoucePath, express.static(staticSource))
 
 const uri = 'http://localhost:' + port
+const uriIP = `http://${getIP()[0]}:` + port
 let _resolve
 const readyPromise = new Promise(resolve =>  {
   _resolve = resolve
@@ -77,6 +79,7 @@ console.log('> Starting dev server...')
 // 编译完成之后执行回调
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n')
+  console.log('> Listening at ' + uriIP + '\n')
   // 测试环境就不要让浏览器打开了，opn包可以自动打开浏览器，做了不同平台下的命令兼容
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
     opn(uri)

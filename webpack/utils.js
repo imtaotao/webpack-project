@@ -1,3 +1,4 @@
+const os = require('os')
 const path = require('path')
 const postcss = require('postcss')
 const config = require('./config')
@@ -63,6 +64,19 @@ exports.PostCssLoader = function (type = 'css') {
       plugins: loader => getPlugins(loader),
     }
   }
+}
+
+// family is IPv4 or IPv6
+exports.getIP = function (family = 'IPv4') {
+  const interfaces = os.networkInterfaces()
+
+  return Object.keys(interfaces).reduce((arr, x) => {
+    const interfce = interfaces[x]
+
+    return arr.concat(Object.keys(interfce)
+      .filter(x => interfce[x].family === family && !interfce[x].internal)
+      .map(x => interfce[x].address))
+  }, [])
 }
 
 // 转换 css url
