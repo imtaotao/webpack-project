@@ -11,6 +11,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const baseWebpackConfig = require('./base.config')
 const utils = require('./utils')
 const config = require('./config')
+const jsSouceMap = !!process.env.npm_config_sourcemap
 
 const prodConfig= {
   module: {
@@ -47,7 +48,7 @@ const prodConfig= {
       }
     ]
   },
-  devtool: config.build.productionSourceMap ? '#source-map' : false,
+  devtool: jsSouceMap ? '#source-map' : false,
   // entry: {
   //   vendor: ['lodash', 'react']
   // },
@@ -165,7 +166,7 @@ if (config.build.limitChunkCount) {
   )
 }
 
-if (!config.build.productionSourceMap) {
+if (!jsSouceMap) {
   prodConfig.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       compress: {

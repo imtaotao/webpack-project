@@ -9,7 +9,7 @@ const resolve = dir => path.join(__dirname, '..', dir)
 
 module.exports = merge({
   entry: {
-    app: resolve('/src/main.ts') 
+    app: resolve('/src/main.ts')
   },
   output: {
     path: config.build.assetsRoot,
@@ -19,7 +19,7 @@ module.exports = merge({
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', 'tsx', '.json'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
       '@': resolve('src')
     }

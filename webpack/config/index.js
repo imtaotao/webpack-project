@@ -7,7 +7,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
-    productionSourceMap: !!process.env.npm_config_sourcemap,
+    productionSourceMap: true,
     // npm install --save-dev compression-webpack-plugin
     productionGzip: false,
     limitChunkCount: false,
@@ -19,7 +19,7 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     port: 3000,
-    autoOpenBrowser: false,
+    autoOpenBrowser: !!process.env.npm_config_open,
     // 打包的静态文件存放位置
     assetsSubDirectory: 'assets',
     assetsPublicPath: '/',
