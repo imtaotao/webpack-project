@@ -22,7 +22,7 @@ module.exports = merge(baseWebpackConfig, {
       test: /\.css$/,
       use: ExtractTextPlugin.extract({
         use: [
-          'happypack/loader?id=css', 
+          'happypack/loader?id=css',
           utils.PostCssLoader()
         ]
       })
@@ -39,7 +39,7 @@ module.exports = merge(baseWebpackConfig, {
       ]
     }]
   },
-  devtool: '#cheap-module-eval-source-map',
+  devtool: '#source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env

@@ -52,6 +52,7 @@ dist/
 build/
 webpack/dll/
 stats.json
+./package-lock.json
 
 # config override
 config/local.json

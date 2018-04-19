@@ -1,0 +1,40 @@
+/* runbar */
+.run_bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    min-width: 103px;
+    height: 50px;
+    border: 2px solid #FAEED6;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    z-index: 60;
+    background: #FFFBF2;
+    justify-content: center;
+  }
+  
+  .running{
+    background: #FFA45B;
+  }
+  
+  .run_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+  }
+  
+  .run_icon {
+    width: 30px;
+    height: 30px;
+    background: resolve('./blockly/ide_icons.svg') no-repeat -2px -258px / 162px 290px;
+  }
+  .run_icon.stop {
+    @extend .run_icon;
+    background: resolve('./blockly/ide_icons.svg') no-repeat -34px -258px / 162px 290px;
+  }

@@ -1,0 +1,29 @@
+.layout-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home-container {
+  @extend .layout-center;
+  height: 100vh;
+}
+.background-img {
+  filter: blur(30px);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: resolve('./image/bg.png') no-repeat;
+  background-size: cover;
+  z-index: 0;
+}
+.programming-page {
+  @extend .layout-center;
+  width: 150px;
+  height: 80px;
+  position: absolute;
+  background: -webkit-gradient(linear,left top, right bottom, from(#485563), to(#29323c));
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 3px 0 50px #e1f0f2;
+  z-index: 1;
+}

@@ -1,0 +1,202 @@
+
+/* toolbox */
+.blocklyTreeSelected {
+  background-color: transparent !important;
+}
+
+.blocklyTreeRow:hover {
+  background-color: transparent !important;
+}
+
+.blocklyToolboxDiv{
+  padding: 0;
+}
+
+
+[role="treeitem"] {
+  background: #fffbf0;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #f2e7c9;
+  cursor: pointer;
+  width: 98%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #776955;
+}
+
+.blocklyTreeRow{
+  height: 0.4rem;
+  line-height: 0.4rem;
+}
+
+[role="treeitem"]:hover {
+  background-color: #fffef9;
+}
+
+
+/*scrollbar*/
+.blocklyToolboxDiv::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+  margin-right: 4px;
+}
+
+.blocklyToolboxDiv::-webkit-scrollbar-track {
+  width: 6px;
+  background: transparent;
+}
+
+.blocklyToolboxDiv::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  border: 1px solid #faf4e4;
+  width: 6px;
+  background: rgbaa(0, 0, 0, 0.1);
+}
+
+.blocklyToolboxDiv::-webkit-scrollbar-thumb:hover {
+  border-radius: 5px;
+  border: 0;
+  background: rgbaa(0, 0, 0, 0.4);
+}
+
+/*Row Hover*/
+.blocklyToolboxDiv [role="treeitem"]:hover {
+  background-color: #fffef9;
+}
+
+.blocklyToolboxDiv [role="treeitem"] {
+  border-left: 10px solid;
+}
+
+.block-value {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 50px;
+  height: 28px;
+  padding: 0 10px;
+  background: #fff;
+  display: none;
+  z-index: 99999;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 28px;
+}
+
+.value-text {
+  height: 28px;
+  width: auto;
+  overflow: hidden;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.block-value-bubble {
+  position: absolute;
+  top: 22px;
+  left: 11px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  border-top: #fff;
+  border-left: #fff;
+  background-color: #fff;
+  transform: rotate(45deg);
+}
+
+@-webkit-keyframes show_error {
+  0% {
+    fill: #666666;
+    stroke: #5b5b5b;
+    transition: all 600ms cubic-bezier(0.755, 0.050, 0.855, 0.060);
+  }
+
+}
+@keyframes show_error {
+  0% {
+    fill: #666666;
+    stroke: #5b5b5b;
+    transition: all 600ms cubic-bezier(0.755, 0.050, 0.855, 0.060);
+  }
+}
+
+
+/* ERROR Animation  */
+.blocklyError > .blocklyPath {
+  animation: show_error 1.2s;
+  -webkit-animation: show_error 1.2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.blocklyCommentTextarea:focus {
+  background-color: #fff;
+  cursor: text;
+}
+
+/**
+    * Type Icon Style
+    */
+.blocklyTypeIcon {
+  transform-origin: top;
+}
+
+/**
+    * Field Button Style
+    */
+.fieldButton {
+  opacity: 1;
+}
+
+.fieldButton:hover {
+  opacity: 0.8;
+}
+
+/* trashcan */
+:global(.blockly-trashcan) {
+  width: 103px;
+  height: calc(100% - 60px);
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top:2px;
+  left: 2px;
+}
+:global(.blockly-trashcan.hide) {
+  display: none;
+}
+
+:global .blockly-trashcan div {
+  width: 42px;
+  height: 51px;
+  position: absolute;
+  left:calc(50% - 20.5px);
+  top: calc(50% - 25.5px);
+}
+
+:global(.trash_head) {
+  display: block;
+  width: 100%;
+  height: 11px;
+  margin-bottom: 3px;
+  background: resolve('./blockly/ide_icons.svg') no-repeat -103px -222px;
+  background-size: 162px 290px;
+  transform-origin:left bottom;
+}
+:global(.trash_rotate) {
+  transform: rotate(-25deg);
+}
+:global(.trash_body) {
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  background: resolve('./blockly/ide_icons.svg') no-repeat -106px -235px;
+  background-size: 162px 290px;
+}

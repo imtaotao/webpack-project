@@ -10,33 +10,40 @@ exports.assetsPath = function (_path) {
 	return path.posix.join(assetsSubDirectory, _path)
 }
 
+exports.cssLoaderConfig = function () {
+  return {
+    loader: 'css-loader',
+    options: {
+      minimize: true,
+      sourceMap: config.build.productionSourceMap,
+      modules: config.common.modules,
+      localIdentName: '[local]_[hash:base64:5]'
+    }
+  }
+}
+
 // https://github.com/postcss/postcss
 exports.PostCssLoader = function (type = 'css') {
   const isProd = process.env.NODE_ENV === 'production'
 
   function getPlugins (loader) {
     const plugins = []
-    const cssRootPath = config.commom.cssRootPath
+    const cssRootPath = config.common.cssRootPath
 
-    if (isProd) {
-      plugins.push(require('cssnano')()) // 压缩css代码
+    if (isProd) { 
+      plugins.push(require('cssnano')())
     }
-    // 如果使用了 resolve 也要配置
-    if (type === 'css' || cssRootPath != null) {
-       // 可以让使用@improt引入的css也加上前缀
-      plugins.push(require('postcss-import')({
-      	root: loader.resourcePath
-      }))
-    }
-    if (type === 'css') {
-      // 可以使用css最新的语法
+    if (type === 'css') { 
       plugins.push(require('postcss-cssnext')())
+    } else {
+      if (!isUndef(cssRootPath)) {
+        plugins.push(require('postcss-import')({root: loader.resourcePath}))
+      }
     }
-    if (cssRootPath != null) {
-      plugins.push(convertUrl()(cssRootPath))
+    if (!isUndef(cssRootPath)) { 
+      plugins.push(convertUrl()(loader.resourcePath, cssRootPath))
     }
     // https://github.com/ai/browserslist#queries，
-    // 在package里面指定browserslist可以减少配置文件
     plugins.push(require('autoprefixer')())
     return plugins
   }
@@ -55,11 +62,11 @@ exports.PostCssLoader = function (type = 'css') {
 
 // 转换 css url
 function convertUrl () {
-  return postcss.plugin('postcss-convert-url', cssRootPath => {
+  return postcss.plugin('postcss-convert-url', (...args) => {
     return (css, result) => {
       css.walkRules(rule => {
         rule.walkDecls(/^background(-image)?$/, decl => {
-          const realUrl = replaceRealUrl(decl, cssRootPath)
+          const realUrl = replaceRealUrl(decl, ...args)
           decl.value = realUrl
         })
       })
@@ -67,12 +74,19 @@ function convertUrl () {
   })
 }
 
-function replaceRealUrl ({value}, cssRootPath) {
+function replaceRealUrl ({value}, resourcePath, cssRootPath) {
+  const relativeUrl = path.relative(path.dirname(resourcePath), cssRootPath)
   value = value.replace(
-    /(resolve)(\(['"])+([^\(\)'"]+)/g, 
+    /(resolve)(\(['"])+([^\(\)'"]+)/g,
     (k1, k2, k3, k4) => {
-      return 'url' + k3 + path.join(cssRootPath, k4)
+      let url = path.join(relativeUrl, k4)
+      url[0] !== '.' &&  (url = './' + url) 
+      return 'url' + k3 + url
     }
   )
   return value
+}
+
+function isUndef (val) {
+  return val === undefined || val === null || val === false
 }
