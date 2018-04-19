@@ -211,11 +211,11 @@ export class Heart {
       load_runtime_provider: () => {
         this.get_block_registry().register_runtime_provider(bbpf.runtime_provider());
       },
-      // Asking Heart for the BlockProvider and BlockXML for Basic Blocks does
-      // have requirements. So the init() function must be called first, after
+      // Asking Heart for the BlockProvider and BlockXML for Basic Blocks§ does
       // which the get_block_provider and get_block_xml functions are availalbe.
       init: (basic_block_config_deps:P.BasicBlockConfigDependencies) => {
         if (this.basic_block_getters == undefined) {
+          // have requirements. So the init() function must be called first, after
           this.basic_block_getters = bbpf.block_provider_and_xml(basic_block_config_deps);
         }
         const bbg = this.basic_block_getters;

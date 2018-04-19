@@ -10,33 +10,29 @@ import { BINDING } from './di_symbols';
  * Heart instance is created. This must be set if you want to assume that Heart
  * is deterministic based on inputs.
  *
- * legacy: Options for working with old BCM projects of Kitten.
+ * legacy: 与Kitten的旧BCM项目合作的选项。
  *
- * opti_compiler: Options for the optimizing compiler.
+ * opti_compiler: 优化编译器的选项。.
  *
- * per_entity_clone_limit: If set, limits the number of clones an entity may
- * have. Old clones are disposed when new clones are created if limit has been
- * hit.
+ * per_entity_clone_limit:如果设置，则限制实体可能的克隆数量
+ * 有。 如果限制已经创建，则创建新克隆时会丢弃旧克隆
+ * 击中。
  *
- * entity_max_clones_per_frame: Limits the number of clones of each entity for each frame.
- * Clone will not be create beyond this amount.
+ * entity_max_clones_per_frame: 限制每个实体的每个实体的克隆数量。
+ * 克隆将不会超过这个数量。
  *
- * reports_all_entities: If true, the environment must report all valid
- * entity_ids to the RuntimeManager using the set_entity_known method. This
- * information is used to ensure that the tell block doesn't attempt to run
- * code with invalid entity_ids.
+ * reports_all_entities: 如果是 true，环境必须报告所有有效的 entity_ids使用set_entity_known方法到RuntimeManager。
+ *  这个信息用于确保tell块不会尝试运行代码与无效的entity_ids。
  *
- * should_report_current_running_block: If true, causes Heart to send the
- * runtime_data.block_running and runtime_data.block_finished events whenever
- * it starts and finishes evaluating a block. Enabling this option may
- * cause worse performance.
+ * should_report_current_running_block: 如果 true，则使 heart 发送
+ * runtime_data.block_running和runtime_data.block_finished事件
+ * 它开始并完成评估块。 启用此选项可能导致更糟糕的表现。
  *
- * user_debug_mode: If true, will enable features that allow users to debug
- * their running projects. This mode is SIGNIFICANTLY slower than the non-
- * debug mode. Uses BlockInterpreter instead of OptiRunner. Features:
- * * Report the result of running a block
- * * TODO Breakpoint step debugging
- * * TODO Ability to re-arrange code while it is executing
+ * user_debug_mode:如果属实，将启用允许用户调试的功能他们的运行项目。 这种模式比非易失性存储器显着慢，
+ * 调试模式。 使用BlockInterpreter而不是OptiRunner。 特征：
+ * * 报告运行块的结果
+ * * TODO 断点调试
+ * * TODO 能够在执行代码时重新排列代码
  */
 export interface HeartConfig {
   block_pool_preallocation_size:number;
